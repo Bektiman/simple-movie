@@ -17,8 +17,8 @@ class MovieController extends Controller
     public function __construct()
     {
 
-        $this->middleware('isAuth');
-        $this->middleware('isMember')->only('show');
+        // $this->middleware('isAuth');
+        // $this->middleware('isMember')->only('show');
 
         for ($i = 0; $i < 10; $i++) {
             $this->movie[] = [
@@ -32,7 +32,8 @@ class MovieController extends Controller
 
     public function index()
     {
-        return $this->movie;
+        $movies = $this->movie;
+        return view('movies.index',['films'=>$movies]);
     }
 
     /**
@@ -65,7 +66,7 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-        return $this->movie[$id];
+        return view('movies.show');;
     }
 
     /**

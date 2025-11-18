@@ -38,6 +38,9 @@ Route::get('/login', function() {
     return 'Please login or Register';
 });
 
+Route::get('/logout', function() {
+    return 'Please login or Register';
+});
 Route::post('/request', function(Request $request ){
 
     if ($request->has('email', 'name')) {
@@ -87,9 +90,27 @@ Route::post('/hasany', function(Request $request ){
 
  });
 
+ Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
+    Route::get('/dashboard', function () {
+        $user = 'admin';
+        return  response('Login Succesfull')->cookie('user',$user);
+        
+    });
+    Route::get('/logout', function () {
+        return  response('Login Succesfull')->withoutCookie('user');
+        
+    });
+     
+ });
+
  Route::get('/response', function(){
     return(response('OK', 200)->header('Content-Type', 'text/plain'));
 
+ });
+
+ Route::get('/home', function () {
+    return view('home');
+     
  });
 
 
