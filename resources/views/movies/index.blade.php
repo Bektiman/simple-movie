@@ -1,16 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Movie Index</title>
 </head>
+
 <body>
-    
+
+    <ul class="">
+        <?php foreach($menu as $key => $value): ?>
+        <li class="">
+            <a href="<?=$value?>" class="">
+                <?= $key?>
+            </a>
+        </li>
+        <?php endforeach;?>
+    </ul>
+
     <h1>
-        Movies
+        {{ $titlePage }}
     </h1>
-    {{ dd($films) }}
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Genre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($movies as $movie)
+                <tr>
+                    <td>{{ $movie['title'] }}</td>
+                    <td>{{ $movie['year'] }}</td>
+                    <td>{{ $movie['genre'] }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
 </body>
+
 </html>

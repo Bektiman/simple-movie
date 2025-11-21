@@ -94,13 +94,13 @@ Route::post('/hasany', function(Request $request ){
     Route::get('/dashboard', function () {
         $user = 'admin';
         return  response('Login Succesfull')->cookie('user',$user);
-        
+
     });
     Route::get('/logout', function () {
-        return  response('Login Succesfull')->withoutCookie('user');
-        
+        return  response('Logout Succesfull')->withoutCookie('user');
+
     });
-     
+
  });
 
  Route::get('/response', function(){
@@ -110,7 +110,13 @@ Route::post('/hasany', function(Request $request ){
 
  Route::get('/home', function () {
     return view('home');
-     
+
  });
+ Route::get('/contact', function () {
+    return view('contact');
 
+ });
+ Route::get('/about', function () {
+    return view('about');
 
+ });
