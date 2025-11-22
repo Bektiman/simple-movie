@@ -33,7 +33,10 @@ class MovieController extends Controller
     public function index()
     {
         $movies = $this->movie;
-        return view('movies.index',['films'=>$movies]);
+        // return view('movies.index',['films'=>$movies]);
+        return view('movies.index', compact('movies'))->with([
+            'titlePage'=>'Movie List'
+        ]);
     }
 
     /**

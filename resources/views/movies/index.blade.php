@@ -11,6 +11,6 @@
     <h1>
         Movies
     </h1>
-    {{ dd($films) }}
+    <h2>{{ $titlePage }}</h2>
 </body>
 </html>
