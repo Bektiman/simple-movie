@@ -261,21 +261,18 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        if (!isset($this->movie[$id])) {
+        if (!isset($this->movies[$id])) {
             return response()->json([
                 'error' => 'Movie not found'
             ], 404);
         }
 
         // hapus movie berdasarkan index array
-        unset($this->movie[$id]);
+        unset($this->movies[$id]);
 
         // reindex array biar urut lagi
-        $this->movie = array_values($this->movie);
+        // $this->movie = array_values($this->movie);
 
-        return response()->json([
-            'message' => 'Movie deleted',
-            'data' => $this->movie
-        ]);
+        return $this->index();
     }
 }

@@ -12,15 +12,27 @@
     <title>Movie App</title>
 </head>
 
-<body class="bg-gray-900 text-white">
+<body class="bg-gray-900 text-white h-screen overflow-hidden">
 
-    @include('partials._header')
+    {{-- HEADER FIXED --}}
+    <x-partials.header class="z-10" />
 
-    <section class="container mx-auto p-5 overflow-visible">
-        @yield('content')
+    <div class="flex h-full pt-4"> {{-- pt sesuai tinggi header jika fixed --}}
+        
+        {{-- SIDEBAR --}}
+        <aside class="w-48 bg-gray-800 p-6 text-white flex-shrink-0">
+            {{ $sidebar }}
+        </aside>
 
-    </section>
+        {{-- MAIN CONTENT SCROLLABLE --}}
+        <main class="flex-1 p-6 overflow-y-auto">
+            {{ $main }}
+        </main>
+
+    </div>
+
     @stack('scripts')
 </body>
+
 
 </html>

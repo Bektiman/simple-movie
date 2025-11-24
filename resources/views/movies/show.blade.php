@@ -41,9 +41,19 @@
                         ✏️
                     </button>
                 </a>
-                <button class ="bg-red-600 p-1 rounded hover:bg-red-500">
+                <form id="delete-form-{{ $id }}" action="{{ route('movie.destroy', $id) }}"
+                    class="" style="display: none;" method="POST">
+                    @csrf
+                    @method('DELETE')
+                </form>
+                <a href="#"
+                    onclick="event.preventDefault(); 
+                        if(confirm('Are you sure?')) { 
+                    document.getElementById('delete-form-{{ $id }}').submit(); 
+                         }"
+                    class="bg-red-600 p-1 rounded hover:bg-red-500">
                     🗑️
-                </button>
+                </a>
             </div>
 
         </div>
