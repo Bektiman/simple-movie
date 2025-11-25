@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMovieRequest;
+use App\Http\Requests\UpdateMovieRequest;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;             // <<< WAJIB ADA
 
@@ -167,10 +169,10 @@ class MovieController extends Controller
                 'description' => 'Seorang mantan marinir bergabung dengan suku Na’vi dalam konflik di planet Pandora.'
             ]
         ]
-        
-        
+
+
         );
-        
+
     }
 
 
@@ -195,9 +197,11 @@ class MovieController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreMovieRequest $request)
     {
         //
+
+        $request->validated();
 
        $newMovie = [
         'title' => $request['title'],
@@ -237,14 +241,11 @@ class MovieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateMovieRequest $request, string $id)
     {
-        if (!isset($this->movie[$id])) {
-            return response()->json([
-                'error' => 'Movie not found'
-            ], 404);
-        }
 
+
+        $request->validated();
         // Update field
         $this->movies[$id]->title = $request['title'];
         $this->movies[$id]->description = $request['description'];
@@ -252,7 +253,7 @@ class MovieController extends Controller
         $this->movies[$id]->release_date = $request['release_date'];
         $this->movies[$id]->cast = explode(',', $request['cast']);
         $this->movies[$id]->image = $request['image-url'];
-        
+
        return $this->show($id);
     }
 

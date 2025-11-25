@@ -24,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ]
 
         );
-        $middleware->append(\App\Http\Middleware\HstsMiddleware::class);
+        $middleware->append(HstsMiddleware::class);
         $middleware->validateCsrfTokens(except: [
 
             'stripe/*',
