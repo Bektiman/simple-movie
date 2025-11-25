@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
@@ -269,3 +269,13 @@ Route::post('/hasany', function(Request $request ){
     return view('about');
 
  });
+
+ Route::get('/session', function (Request $request ) {
+    $request->session()->put('is_membership','yes');
+    $request->session()->put('name','yoga');
+    $request->session()->forget('name');
+    return session()->all();
+
+ });
+
+ Route::get('/category', [CategoryController::class, 'index']);

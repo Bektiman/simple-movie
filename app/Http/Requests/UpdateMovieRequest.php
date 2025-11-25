@@ -40,4 +40,17 @@ class UpdateMovieRequest extends FormRequest
             'image-url' => filter_var(trim($this->{'image-url'}), FILTER_SANITIZE_URL),
         ]);
     }
+
+    public function messages(){
+        return [
+
+            'title.required' => 'Judul film tidak boleh kosong',
+            'description.required' => 'Deskripsi film tidak boleh kosong',
+            'cast.required' => 'Cast tidak boleh kosong',
+            'genre.required' => 'Genre tidak boleh kosong',
+            'image-url.required' => 'Link gambar tidak boleh kosong'
+
+
+        ];
+    }
 }

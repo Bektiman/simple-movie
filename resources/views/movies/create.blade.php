@@ -11,7 +11,7 @@
             @csrf
             <div class="">
                 <label for="title" class="block text-lg mb-2">Title</label>
-                <input type="text" name="title" id="title"
+                <input type="text" name="title" id="title" value="{{ old('title') }}"
                     class="w-full p-2 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
                 @error('title')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -21,14 +21,14 @@
             <div class="">
                 <label for="description" class="block text-lg mb-2">Description</label>
                 <textarea name="description" id="description"
-                    class="w-full p-2 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"></textarea>
+                    class="w-full p-2 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-600">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
             <div>
                 <label for="release_date" class="block mb-2">Release Date</label>
-                <input type="text" id="release_date" name="release_date"
+                <input type="text" id="release_date" name="release_date" value="{{ old('release_date') }}"
                     class="w-full p-2 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
                 @error('release_datae')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -37,7 +37,7 @@
             </div>
             <div class="">
                 <label for="cast" class="block text-lg mb-2">Cast</label>
-                <input type="text" name="cast" id="cast"
+                <input type="text" name="cast" id="cast" value="{{ old('cast') }}"
                     class="w-full p-2 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
                 @error('cast')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -45,7 +45,7 @@
             </div>
             <div class="">
                 <label for="genre" class="block text-lg mb-2">Genre</label>
-                <input type="text" name="genre" id="genre"
+                <input type="text" name="genre" id="genre" value="{{ old('cast') }}"
                     class="w-full p-2 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
                 @error('genre')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -53,7 +53,7 @@
             </div>
             <div class="">
                 <label for="image-url" class="block text-lg mb-2">Link Image</label>
-                <input type="text" name="image-url" id="image-url"
+                <input type="text" name="image-url" id="image-url" value="{{ old('image-urlS') }}"
                     class="w-full p-2 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
                 @error('image-url')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
