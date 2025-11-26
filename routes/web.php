@@ -176,6 +176,17 @@ Route::group(
     }
 );
 
+Route::group(
+    [
+        'prefix'=>'category',
+        'as' => 'category.'
+    ], function() {
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::get('/create', [CategoryController::class, 'create'])->name('create');
+        Route::post('/',[CategoryController::class, 'store'])->name('store');
+    }
+);
+
 Route::get('/phpinfo', function () {
     ob_start();
     phpinfo();
@@ -278,4 +289,4 @@ Route::post('/hasany', function(Request $request ){
 
  });
 
- Route::get('/category', [CategoryController::class, 'index']);
+

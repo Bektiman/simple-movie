@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
@@ -13,8 +17,16 @@ class CategoryController extends Controller
     public function index()
     {
         //
-        $categories = DB::table('categories')->get();
+        // $categories = DB::table('categories')->get();
+        // return $categories;
+
+        // $categories= Category::select(['name', 'slug'])->get();
+        // return $categories;
+
+        $categories = Category::all();
+
         return $categories;
+
     }
 
     /**
@@ -23,14 +35,26 @@ class CategoryController extends Controller
     public function create()
     {
         //
+
+        return view('categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
         //
+
+        $request->validated();
+        DB::table('categories')->insert([
+            'name' => $request['name'],
+            'slug' => Str::of($request['name'])->slug('-'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return $this->index();
     }
 
     /**
