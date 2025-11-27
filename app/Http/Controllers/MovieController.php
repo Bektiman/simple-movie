@@ -2,30 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexMovieRequest;
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
 use App\Models\Movie;
 use Illuminate\Routing\Controller;             // <<< WAJIB ADA
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class MovieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
-    // public $movie;
-    // public $movies;
-
     public function __construct() {}
 
-    public function index()
+    public function index(IndexMovieRequest $request)
     {
-        $movies = Movie::all();
+        // Ambil parameter dari request
+        // $page = request('page', 1);
+        // $search = request('search', '');
+        // $perPage = 20;
 
-        return view('movies.index', compact('movies'))->with(
-            ['titlePage' => 'Movie List']
-        );
+        // // Buat cache key unik per page + filter
+        // $cacheKey = "movies.page.$page.search.".md5($search);
+
+        // // Ambil data dari cache atau query DB
+        // $movies = Cache::remember($cacheKey, 86400, function () use ($search, $perPage) {
+        //     $query = Movie::query();
+
+        //     // Filter search jika ada
+        //     if (! empty($search)) {
+        //         $query->where('title', 'like', "%{$search}%")
+        //             ->orWhere('description', 'like', "%{$search}%");
+        //     }
+
+        //     // Optional: orderBy (pastikan ada index di kolom ini)
+        //     $query->orderBy('title');
+
+        //     // Paginate
+        //     return $query->paginate($perPage);
+
+        $request->validated();
+
+        $movies = Cache::remember('movie-index-page'.$request->page,86400, function(){
+            return Movie::paginate(10);
+        });
+
+
+
+        return view('movies.index', compact('movies'))
+            ->with(['titlePage' => 'Movie List']);
     }
 
     /**
@@ -33,7 +56,6 @@ class MovieController extends Controller
      */
     public function create()
     {
-        //
 
         return view('movies.create');
     }
@@ -47,31 +69,18 @@ class MovieController extends Controller
 
         $request->validated();
 
-        //    $newMovie = [
-        //     'title' => $request['title'],
-        //     'description' => $request['description'],
-        //     'release_date' => $request['release_date'],
-        //     'cast' => explode(',',$request['cast']),
-        //     'genre' => $request['genre'],
-        //     'image'=> $request['image-url']
-        //    ];
-
-        //    dd($newMovie);
-
-        //    $newMovie = (object) $newMovie;
-        //    $this->movies[] = $newMovie;
-        //    return $this->index();
-
-        DB::table('movies')->insert([
-            'title' => $request['title'],
-            'description' => $request['description'],
-            'release_date' => $request['release_date'],
-            'cast' => explode(',', $request['cast']),
-            'genre' => $request['genre'],
+        Movie::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'release_date' => $request->release_date,
+            'cast' => explode(',', $request->cast),
+            'genre' => $request->genre,
             'image' => $request['image-url'],
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
+
+        Cache::forget('movie.index');
+
+        return redirect()->route('movie.index')->with('success', 'Movie created.');
     }
 
     /**
@@ -79,7 +88,9 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-        $movie = Movie::where('id', $id);
+        $movie = Cache::remember("movie.show.$id", 86400, function () use ($id) {
+            return Movie::findOrFail($id); // atau firstOrFail()
+        });
 
         return view('movies.show', compact(['movie', 'id']));
     }
@@ -89,15 +100,11 @@ class MovieController extends Controller
      */
     public function edit(string $id)
     {
-        $movie = DB::table('movies')->where('id', $id)->first();
-        $castArray = json_decode($movie->cast, true) ?? [];
-
+        $movie = Movie::findOrFail($id);
+        $castArray = $movie->cast ?? [];
         $movie->cast = implode(',', $castArray);
-    
-        return view('movies.edit', compact('movie', 'id'));
-        // $movie->cast = implode(',', $movie->cast);
 
-        // return view('movies.edit', compact(['movie', 'id']));
+        return view('movies.edit', compact('movie', 'id'));
     }
 
     /**
@@ -107,20 +114,20 @@ class MovieController extends Controller
     {
 
         $request->validated();
-        // Update field
-        DB::table('movies')
-            ->where('id', $id)
-            ->update([
-                'title' => $request['title'],
-                'description' => $request['description'],
-                'genre' => $request['genre'],
-                'release_date' => $request['release_date'],
-                'cast' => json_encode(explode(',', $request['cast'])),
-                'image' => $request['image-url'],
-                'updated_at' => now(), // jangan lupa updated_at
-            ]);
+        Movie::findOrFail($id)->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'release_date' => $request->release_date,
+            'cast' => explode(',', $request->cast),
+            'genre' => $request->genre,
+            'image' => $request['image-url'],
+        ]);
 
-        return $this->show($id);
+        Cache::forget('movie.index');
+        Cache::forget("movie.show.$id");
+
+        return redirect()->route('movie.show', $id)
+            ->with('success', 'Movie updated.');
     }
 
     /**
@@ -128,24 +135,12 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        // if (! isset($this->movies[$id])) {
-        //     return response()->json([
-        //         'error' => 'Movie not found',
-        //     ], 404);
-        // }
 
-        // hapus movie berdasarkan index array
-        // unset($this->movies[$id]);
+        Movie::findOrFail($id)->delete();
+        Cache::forget("movie.show.$id");
+        Cache::forget('movie.index');
 
-        // reindex array biar urut lagi
-        // $this->movie = array_values($this->movie);
-
-        DB::table('movies')
-        ->where('id', $id)
-        ->update([
-            'deleted_at' => now(),
-        ]);
-
-        return $this->index();
+        return redirect()->route('movie.index')
+            ->with('success', 'Movie deleted.');
     }
 }

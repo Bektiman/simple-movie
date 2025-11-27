@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class AuthRegistrationRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            //
+            'username' => 'required|string',
+            'email' => 'required|email:unique:users',
+            'password' => 'required|confirmed|min:8',
+        ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'username' => strip_tags(trim($this->username)),
+            'email' => strip_tags(trim($this->email)),
+            'password' => strip_tags(trim($this->password)),
+        ]);
+    }
+}

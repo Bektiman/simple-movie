@@ -33,7 +33,7 @@ class StoreCategoryRequest extends FormRequest
             // 'slug'=> 'required|url'
         ];
     }
-    protected function sanitize(){
+    protected function prepareForValidation(){
         $this->merge([
             'name' => strip_tags(trim($this->name)),
             // 'slug' => strip_tags(trim($this->slug)),

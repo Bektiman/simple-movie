@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\HomeController;
@@ -175,7 +176,6 @@ Route::group(
 
     }
 );
-
 Route::group(
     [
         'prefix'=>'category',
@@ -184,6 +184,19 @@ Route::group(
         Route::get('/', [CategoryController::class, 'index'])->name('index');
         Route::get('/create', [CategoryController::class, 'create'])->name('create');
         Route::post('/',[CategoryController::class, 'store'])->name('store');
+    }
+);
+
+Route::group(
+    [
+        'prefix'=>'auth',
+        'as'=>'auth.'
+    ], function(){
+        Route::get('/register',[AuthController::class, 'showRegisterPage'])->name('registerPage');
+        Route::post('/register',[AuthController::class, 'register'])->name('register');
+        Route::get('/login',[AuthController::class, 'showLoginPage'])->name('loginPage');
+        Route::post('/login',[AuthController::class, 'login'])->name('login');
+
     }
 );
 

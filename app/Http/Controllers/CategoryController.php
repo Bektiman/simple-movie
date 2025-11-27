@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -14,7 +15,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(IndexCategoryRequest $request)
     {
         //
         // $categories = DB::table('categories')->get();
@@ -23,7 +24,12 @@ class CategoryController extends Controller
         // $categories= Category::select(['name', 'slug'])->get();
         // return $categories;
 
-        $categories = Category::all();
+        // $categories = Category::all();
+        $request->validated();
+        $categories = Cache::remember('category-index-page'.$request->page,86400, function(){
+            return Category::paginate(10);
+        });
+
 
         return $categories;
 
@@ -47,14 +53,15 @@ class CategoryController extends Controller
         //
 
         $request->validated();
-        DB::table('categories')->insert([
+
+        Category::create([
             'name' => $request['name'],
             'slug' => Str::of($request['name'])->slug('-'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        return $this->index();
+        return redirect()->route('category.index')->with('success', 'Movie created.');
     }
 
     /**

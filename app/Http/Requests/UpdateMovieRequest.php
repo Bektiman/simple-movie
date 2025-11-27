@@ -31,7 +31,7 @@ class UpdateMovieRequest extends FormRequest
         ];
     }
 
-    protected function sanitize(){
+    protected function prepareForValidation(){
         $this->merge([
             'title' => strip_tags(trim($this->title)),
             'description' => strip_tags(trim($this->description)),
