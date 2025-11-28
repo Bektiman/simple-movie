@@ -19,11 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias(
             [
                 'isMember' => CheckMembership::class,
-                'isAuth' => IsAuth::class,
+                // 'isAuth' => IsAuth::class,
                 'hsts' => HstsMiddleware::class
             ]
 
         );
+        $middleware->redirectGuestsTo(fn () => route('auth.loginPage'));
         $middleware->append(HstsMiddleware::class);
         $middleware->validateCsrfTokens(except: [
 

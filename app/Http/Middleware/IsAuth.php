@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class IsAuth
@@ -15,8 +16,8 @@ class IsAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!$request->authenticated){
-            return redirect('login');
+        if(!Auth::check()){
+            return redirect()->route('auth.loginPage');
         }
         return $next($request);
     }

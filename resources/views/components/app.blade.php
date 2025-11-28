@@ -18,7 +18,7 @@
     <x-partials.header class="z-10" />
 
     <div class="flex h-full pt-4"> {{-- pt sesuai tinggi header jika fixed --}}
-        
+
         {{-- SIDEBAR --}}
         <aside class="w-48 bg-gray-800 p-6 text-white flex-shrink-0">
             {{ $sidebar }}

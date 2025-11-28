@@ -23,17 +23,17 @@ class AuthLoginRequest extends FormRequest
     {
         return [
             //
-            'username'=>'required|string',
-            'email'=>'required|email:unique:users',
-            'password'=>'required|confirmed|min:8'
+            // 'username'=>'required|string',
+            'email'=>'required|email',
+            'password'=>'required'
         ];
     }
     protected function prepareForValidation()
     {
         $this->merge([
-            'username' => strip_tags(trim($this->username)),
+            // 'username' => strip_tags(trim($this->username)),
             'email' => strip_tags(trim($this->email)),
             'password'=> strip_tags(trim($this->password))
         ]);
     }
-}   
+}

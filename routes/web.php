@@ -163,7 +163,8 @@ Route::get('/', function () {
 Route::group(
     [
         'prefix' => 'movie',
-        'as' => 'movie.'
+        'as' => 'movie.',
+        'middleware' => 'auth'
     ], function () {
 
         Route::get('/',[MovieController::class, 'index'])->name('index');
@@ -196,7 +197,7 @@ Route::group(
         Route::post('/register',[AuthController::class, 'register'])->name('register');
         Route::get('/login',[AuthController::class, 'showLoginPage'])->name('loginPage');
         Route::post('/login',[AuthController::class, 'login'])->name('login');
-
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     }
 );
 
@@ -210,9 +211,9 @@ Route::get('/pricing', function() {
     return 'Please buy  a membership';
 });
 
-Route::get('/login', function() {
-    return 'Please login or Register';
-});
+// Route::get('/login', function() {
+//     return 'Please login or Register';
+// });
 
 Route::get('/logout', function() {
     return 'Please login or Register';
