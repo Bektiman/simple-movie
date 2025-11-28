@@ -28,6 +28,16 @@ class UserController extends Controller
         return $user;
 
      }
+
+     public function updateProfile(Request $request, string $id){
+        $user = User::with('profile')->findOrFail($id);
+        $user->profile->update([
+            'phone'   => $request->phone,
+            'address' => $request->address,
+        ]);
+
+        return $user;
+     }
     public function index()
     {
         //

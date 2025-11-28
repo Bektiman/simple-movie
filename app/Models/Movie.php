@@ -22,4 +22,8 @@ class Movie extends Model
         'release_date' => 'date',
         'year' => 'integer',
     ];
+
+    public function ratings(){
+        return $this->hasMany(Rating::class);
+    }
 }

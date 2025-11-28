@@ -209,6 +209,7 @@ Route::group(
     ], function(){
         Route::post('/profile',[UserController::class, 'createProfile']);
         Route::get('/profile',[UserController::class, 'userProfile']);
+        Route::put('/profile/{id}', [UserController::class, 'updateProfile']);
     }
 );
 
