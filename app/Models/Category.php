@@ -17,5 +17,16 @@ class Category extends Model
         'slug'
     ];
 
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at'
+    ];
+
+    public function movies (){
+
+        return $this->belongsToMany(Movie::class, 'category_movie','category_id','movie_id');
+    }
+
 
 }

@@ -16,6 +16,11 @@ class Movie extends Model
         'cast',
         'description',
     ];
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at'
+    ];
 
     protected $casts = [
         'cast' => 'array', // otomatis menjadi array
@@ -25,5 +30,10 @@ class Movie extends Model
 
     public function ratings(){
         return $this->hasMany(Rating::class);
+    }
+    
+    public function categories(){
+
+        return $this->belongsToMany(Category::class,'category_movie','movie_id','category_id');
     }
 }

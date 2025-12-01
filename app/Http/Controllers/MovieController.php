@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\IndexMovieRequest;
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
+use App\Models\Category;
 use App\Models\Movie;
 use Illuminate\Routing\Controller;             // <<< WAJIB ADA
 use Illuminate\Support\Facades\Cache;
@@ -142,5 +143,31 @@ class MovieController extends Controller
 
         return redirect()->route('movie.index')
             ->with('success', 'Movie deleted.');
+    }
+
+    public function attachCategory(){
+
+        $movie = Movie::findOrFail(1);
+        $movie->categories()->attach([1,2]);
+
+        return $movie->with('categories')->first();
+    }
+
+    public function detachCategory(){
+        $movie = Movie::findOrFail(1);
+        $movie->categories()->detach([1,2]);
+        return $movie->with('categories')->first();
+    }
+
+    public function syncCategory(){
+
+        $movie = Movie::findOrFail(1);
+        $movie->categories()->sync([1,4,5]);
+
+        // $category = Category::findOrFail(3);
+        // $category->movies()->sync([1]);
+        return $movie->with('categories')->first();
+
+
     }
 }
